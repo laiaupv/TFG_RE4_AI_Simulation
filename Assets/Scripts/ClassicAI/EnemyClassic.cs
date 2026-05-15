@@ -30,4 +30,8 @@ public class EnemyClassic : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
+    public string GetCurrentState()
+{
+    return _stateMachine.GetCurrentStateName();
+}
 }
