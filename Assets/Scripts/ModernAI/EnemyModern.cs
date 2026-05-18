@@ -57,40 +57,37 @@ public class EnemyModern : MonoBehaviour
 
     void BuildBehaviorTree()
     {
-        // Nodo de ataque
-        ActionNode attackNode = new ActionNode(() =>
+        // Nodo de combate — detecta, persigue y ataca
+        ActionNode combatNode = new ActionNode(() =>
         {
+            if (!CanSeePlayer() && !CanHearPlayer())
+                return NodeState.Failure;
+
             float distance = Vector3.Distance(transform.position, _player.position);
+
+            // Si está en rango de ataque
             if (distance <= attackRange)
             {
                 _agent.SetDestination(transform.position);
                 _currentState = "Ataque";
                 Debug.Log("Atacando!");
-                return NodeState.Success;
-            }
-            return NodeState.Failure;
-        });
-
-        // Nodo de persecución con NavMesh
-        ActionNode chaseNode = new ActionNode(() =>
-        {
-            if (CanSeePlayer() || CanHearPlayer())
-            {
-                _agent.SetDestination(_player.position);
-                _currentState = "Persecución";
-
-                Vector3 direction = _player.position - transform.position;
-                direction.y = 0;
-                if (direction != Vector3.zero)
-                    transform.rotation = Quaternion.LookRotation(direction);
-
                 return NodeState.Running;
             }
-            return NodeState.Failure;
+
+            // Si detecta al jugador pero no está en rango persigue
+            _agent.SetDestination(_player.position);
+            _currentState = "Persecución";
+
+            Vector3 direction = _player.position - transform.position;
+            direction.y = 0;
+            if (direction != Vector3.zero)
+                transform.rotation = Quaternion.LookRotation(direction);
+
+            return NodeState.Running;
         });
 
-        // Nodo de detección
-        ActionNode detectNode = new ActionNode(() =>
+        // Nodo de alerta
+        ActionNode alertNode = new ActionNode(() =>
         {
             if (CanSeePlayer() || CanHearPlayer())
             {
@@ -103,7 +100,6 @@ public class EnemyModern : MonoBehaviour
         // Nodo de patrulla con NavMesh
         ActionNode patrolNode = new ActionNode(() =>
         {
-            // Si acaba de volver de persecución asigna nuevo destino
             if (_previousState != "Patrulla")
             {
                 _currentWaypoint = GetNearestWaypoint();
@@ -123,12 +119,11 @@ public class EnemyModern : MonoBehaviour
             return NodeState.Running;
         });
 
-        // Secuencia de combate: detectar → perseguir → atacar
+        // Secuencia alerta → combate
         SequenceNode combatSequence = new SequenceNode(new List<Node>
         {
-            detectNode,
-            chaseNode,
-            attackNode
+            alertNode,
+            combatNode
         });
 
         // Selector raíz: intenta combate, si falla patrulla
@@ -146,7 +141,7 @@ public class EnemyModern : MonoBehaviour
 
         for (int i = 0; i < waypoints.Length; i++)
         {
-            float distance = Vector3.Distance(transform.position, 
+            float distance = Vector3.Distance(transform.position,
                                               waypoints[i].position);
             if (distance < minDistance)
             {

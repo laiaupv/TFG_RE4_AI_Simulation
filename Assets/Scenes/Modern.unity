@@ -1068,7 +1068,7 @@ GameObject:
   - component: {fileID: 934115157}
   - component: {fileID: 934115156}
   - component: {fileID: 934115155}
-  - component: {fileID: 934115154}
+  - component: {fileID: 934115159}
   m_Layer: 5
   m_Name: UI_Canvas
   m_TagString: Untagged
@@ -1076,22 +1076,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &934115154
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 934115153}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f1b35a251b5052478a0bdf1a188cbf7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stateText: {fileID: 1456234433}
-  noiseText: {fileID: 0}
-  enemy: {fileID: 0}
-  player: {fileID: 0}
 --- !u!114 &934115155
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1176,6 +1160,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &934115159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 934115153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a77906b966b447f4987f498bc0db10f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateText: {fileID: 1456234433}
+  noiseText: {fileID: 355903438}
+  enemy: {fileID: 1821459616}
+  player: {fileID: 1260454684}
 --- !u!1 &1232892136
 GameObject:
   m_ObjectHideFlags: 0
