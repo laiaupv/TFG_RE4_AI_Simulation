@@ -9,6 +9,7 @@ public class AttackState : IState
     private float _attackCooldown = 1f;
     private float _timer = 0f;
     private float _chaseRadius = 2f;
+    private PlayerHealth _playerHealth;
 
     public AttackState(Transform enemy, StateMachine stateMachine,
                        Transform player, Transform[] waypoints)
@@ -17,6 +18,7 @@ public class AttackState : IState
         _stateMachine = stateMachine;
         _player = player;
         _waypoints = waypoints;
+        _playerHealth = player.GetComponent<PlayerHealth>();
     }
 
     public void OnEnter()
@@ -29,7 +31,6 @@ public class AttackState : IState
     {
         _timer += Time.deltaTime;
 
-        // Mira hacia el jugador
         Vector3 direction = _player.position - _enemy.position;
         direction.y = 0;
         if (direction != Vector3.zero)
@@ -37,7 +38,6 @@ public class AttackState : IState
 
         float distanceToPlayer = Vector3.Distance(_enemy.position, _player.position);
 
-        // Si el jugador se aleja vuelve a perseguir
         if (distanceToPlayer > _chaseRadius)
         {
             _stateMachine.ChangeState(new ChaseState(_enemy, _stateMachine,
@@ -45,10 +45,11 @@ public class AttackState : IState
             return;
         }
 
-        // Ataca cada segundo
         if (_timer >= _attackCooldown)
         {
             _timer = 0f;
+            if (_playerHealth != null)
+                _playerHealth.TakeDamage(20f);
             Debug.Log("¡Atacando al jugador!");
         }
     }

@@ -13,14 +13,17 @@ public class EnemyModern : MonoBehaviour
 
     [Header("Ataque")]
     public float attackRange = 1.5f;
+    public float attackCooldown = 1f;
 
     [Header("Patrulla")]
     public Transform[] waypoints;
 
     private int _currentWaypoint = 0;
+    private float _attackTimer = 0f;
     private NavMeshAgent _agent;
     private Transform _player;
     private PlayerController _playerController;
+    private PlayerHealth _playerHealth;
     private Node _behaviorTree;
     private string _currentState = "Patrulla";
     private string _previousState = "";
@@ -41,6 +44,7 @@ public class EnemyModern : MonoBehaviour
         }
 
         _playerController = _player.GetComponent<PlayerController>();
+        _playerHealth = _player.GetComponent<PlayerHealth>();
 
         if (_agent == null)
         {
@@ -57,7 +61,29 @@ public class EnemyModern : MonoBehaviour
 
     void BuildBehaviorTree()
     {
-        // Nodo de combate — detecta, persigue y ataca
+        // Nodo de ataque
+        ActionNode attackNode = new ActionNode(() =>
+        {
+            float distance = Vector3.Distance(transform.position, _player.position);
+            if (distance <= attackRange)
+            {
+                _agent.SetDestination(transform.position);
+                _currentState = "Ataque";
+
+                _attackTimer += Time.deltaTime;
+                if (_attackTimer >= attackCooldown)
+                {
+                    _attackTimer = 0f;
+                    if (_playerHealth != null)
+                        _playerHealth.TakeDamage(20f);
+                    Debug.Log("Atacando!");
+                }
+                return NodeState.Running;
+            }
+            return NodeState.Failure;
+        });
+
+        // Nodo de combate
         ActionNode combatNode = new ActionNode(() =>
         {
             if (!CanSeePlayer() && !CanHearPlayer())
@@ -65,16 +91,22 @@ public class EnemyModern : MonoBehaviour
 
             float distance = Vector3.Distance(transform.position, _player.position);
 
-            // Si está en rango de ataque
             if (distance <= attackRange)
             {
                 _agent.SetDestination(transform.position);
                 _currentState = "Ataque";
-                Debug.Log("Atacando!");
+
+                _attackTimer += Time.deltaTime;
+                if (_attackTimer >= attackCooldown)
+                {
+                    _attackTimer = 0f;
+                    if (_playerHealth != null)
+                        _playerHealth.TakeDamage(20f);
+                    Debug.Log("Atacando!");
+                }
                 return NodeState.Running;
             }
 
-            // Si detecta al jugador pero no está en rango persigue
             _agent.SetDestination(_player.position);
             _currentState = "Persecución";
 
@@ -126,7 +158,7 @@ public class EnemyModern : MonoBehaviour
             combatNode
         });
 
-        // Selector raíz: intenta combate, si falla patrulla
+        // Selector raíz
         _behaviorTree = new SelectorNode(new List<Node>
         {
             combatSequence,
