@@ -1121,8 +1121,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ec474e778ebc664b9535bd45ccb675b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 5
-  runSpeed: 10
+  walkSpeed: 3
+  runSpeed: 5
   isMakingNoise: 0
 --- !u!114 &796345209
 MonoBehaviour:
@@ -1136,8 +1136,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ec474e778ebc664b9535bd45ccb675b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 5
-  runSpeed: 10
+  walkSpeed: 3
+  runSpeed: 5
   isMakingNoise: 0
 --- !u!143 &796345210
 CharacterController:

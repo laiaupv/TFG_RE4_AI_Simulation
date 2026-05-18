@@ -1657,8 +1657,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ec474e778ebc664b9535bd45ccb675b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 5
-  runSpeed: 10
+  walkSpeed: 3
+  runSpeed: 6
   isMakingNoise: 0
 --- !u!114 &1260454684
 MonoBehaviour:
@@ -1672,8 +1672,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ec474e778ebc664b9535bd45ccb675b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 5
-  runSpeed: 10
+  walkSpeed: 3
+  runSpeed: 5
   isMakingNoise: 0
 --- !u!136 &1260454685
 CapsuleCollider:
@@ -2469,7 +2469,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.3
-  m_Speed: 3.5
+  m_Speed: 2.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120

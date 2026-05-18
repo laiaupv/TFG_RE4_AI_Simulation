@@ -5,7 +5,7 @@ public class IdleState : IState
     private Transform _enemy;
     private Transform[] _waypoints;
     private int _currentWaypoint = 0;
-    private float _speed = 3f;
+    private float _speed = 2f;
     private float _waypointThreshold = 0.5f;
     private StateMachine _stateMachine;
     private Transform _player;

@@ -6,7 +6,7 @@ public class ChaseState : IState
     private StateMachine _stateMachine;
     private Transform _player;
     private Transform[] _waypoints;
-    private float _speed = 5f;
+    private float _speed = 3.5f;
     private float _attackRadius = 1.5f;
     private float _loseRadius = 8f;
     private CharacterController _characterController;
