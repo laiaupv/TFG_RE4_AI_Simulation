@@ -8,11 +8,13 @@ public class PlayerController : MonoBehaviour
 
     private CharacterController _controller;
     private Camera _cam;
+    private Animator _animator;
 
     void Start()
     {
         _controller = GetComponent<CharacterController>();
         _cam = Camera.main;
+        _animator = GetComponentInChildren<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -41,6 +43,20 @@ public class PlayerController : MonoBehaviour
         {
             transform.rotation = Quaternion.LookRotation(movement);
             _controller.Move(movement.normalized * currentSpeed * Time.deltaTime);
+        }
+
+        // Actualiza las animaciones
+        if (_animator != null)
+        {
+            float speed = movement.magnitude;
+            if (isRunning && speed > 0.1f)
+                _animator.SetFloat("Speed", 1f);
+            else if (speed > 0.1f)
+                _animator.SetFloat("Speed", 0.3f);
+            else
+                _animator.SetFloat("Speed", 0f);
+
+            _animator.SetFloat("SpeedX", moveX);
         }
     }
 }
