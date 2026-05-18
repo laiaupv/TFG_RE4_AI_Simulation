@@ -590,10 +590,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 796345207}
-  distance: 5
-  height: 2.5
-  rightOffset: 1.2
-  mouseSensitivity: 3
+  distance: 2
+  height: 1
+  rightOffset: 2
+  mouseSensitivity: 2
 --- !u!1 &445767607
 GameObject:
   m_ObjectHideFlags: 0
