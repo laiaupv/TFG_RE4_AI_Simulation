@@ -2,15 +2,19 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float walkSpeed = 5f;
-    public float runSpeed = 10f;
+    public float walkSpeed = 3f;
+    public float runSpeed = 6f;
     public bool isMakingNoise = false;
 
     private CharacterController _controller;
+    private Camera _cam;
 
     void Start()
     {
         _controller = GetComponent<CharacterController>();
+        _cam = Camera.main;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     void Update()
@@ -23,8 +27,20 @@ public class PlayerController : MonoBehaviour
 
         float currentSpeed = isRunning ? runSpeed : walkSpeed;
 
-        Vector3 movement = new Vector3(moveX, 0f, moveZ);
-        movement = movement.normalized * currentSpeed * Time.deltaTime;
-        _controller.Move(movement);
+        // Movimiento relativo a la cámara
+        Vector3 camForward = _cam.transform.forward;
+        Vector3 camRight = _cam.transform.right;
+        camForward.y = 0;
+        camRight.y = 0;
+        camForward.Normalize();
+        camRight.Normalize();
+
+        Vector3 movement = (camForward * moveZ + camRight * moveX);
+
+        if (movement.magnitude > 0.1f)
+        {
+            transform.rotation = Quaternion.LookRotation(movement);
+            _controller.Move(movement.normalized * currentSpeed * Time.deltaTime);
+        }
     }
 }
