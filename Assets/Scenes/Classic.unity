@@ -1876,9 +1876,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateText: {fileID: 445767608}
-  noiseText: {fileID: 0}
+  noiseText: {fileID: 1730480178}
   enemy: {fileID: 1174868107}
-  player: {fileID: 0}
+  player: {fileID: 796345208}
 --- !u!114 &1248500085
 MonoBehaviour:
   m_ObjectHideFlags: 0

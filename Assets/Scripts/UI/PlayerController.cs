@@ -26,10 +26,10 @@ public class PlayerController : MonoBehaviour
 
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
         isMakingNoise = isRunning && (moveX != 0 || moveZ != 0);
+        Debug.Log("isRunning: " + isRunning + " isMakingNoise: " + isMakingNoise);
 
         float currentSpeed = isRunning ? runSpeed : walkSpeed;
 
-        // Movimiento relativo a la cámara
         Vector3 camForward = _cam.transform.forward;
         Vector3 camRight = _cam.transform.right;
         camForward.y = 0;
@@ -45,7 +45,6 @@ public class PlayerController : MonoBehaviour
             _controller.Move(movement.normalized * currentSpeed * Time.deltaTime);
         }
 
-        // Actualiza las animaciones
         if (_animator != null)
         {
             float speed = movement.magnitude;
