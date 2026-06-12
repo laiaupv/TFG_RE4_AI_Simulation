@@ -9,24 +9,31 @@ public class PlayerController : MonoBehaviour
     private CharacterController _controller;
     private Camera _cam;
     private Animator _animator;
+    private bool _cursorLocked = true;
 
     void Start()
     {
         _controller = GetComponent<CharacterController>();
         _cam = Camera.main;
         _animator = GetComponentInChildren<Animator>();
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        LockCursor();
     }
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (_cursorLocked) UnlockCursor();
+            else LockCursor();
+        }
+
+        if (!_cursorLocked) return;
+
         float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
 
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
         isMakingNoise = isRunning && (moveX != 0 || moveZ != 0);
-        Debug.Log("isRunning: " + isRunning + " isMakingNoise: " + isMakingNoise);
 
         float currentSpeed = isRunning ? runSpeed : walkSpeed;
 
@@ -57,5 +64,19 @@ public class PlayerController : MonoBehaviour
 
             _animator.SetFloat("SpeedX", moveX);
         }
+    }
+
+    void LockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        _cursorLocked = true;
+    }
+
+    void UnlockCursor()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        _cursorLocked = false;
     }
 }

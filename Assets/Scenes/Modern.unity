@@ -1629,7 +1629,7 @@ MonoBehaviour:
   stateText: {fileID: 1456234433}
   noiseText: {fileID: 355903438}
   enemy: {fileID: 1821459616}
-  player: {fileID: 0}
+  player: {fileID: 2049758339}
 --- !u!114 &934115160
 MonoBehaviour:
   m_ObjectHideFlags: 0
