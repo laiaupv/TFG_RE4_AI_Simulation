@@ -87,12 +87,12 @@ public class EnemyClassic : MonoBehaviour
         float distanceToPlayer = Vector3.Distance(transform.position,
                                                    _player.position);
 
-        // Si el jugador hace ruido dentro del radio auditivo
         if (_playerController.isMakingNoise && distanceToPlayer < hearingRadius)
         {
             string currentState = _stateMachine.GetCurrentStateName();
             if (currentState == "IdleState")
             {
+                Debug.Log("[FSM] DETECCIÓN AUDITIVA - Distancia: " + distanceToPlayer.ToString("F2") + "u");
                 _stateMachine.ChangeState(new AlertState(
                     transform, _stateMachine, _player, waypoints));
             }

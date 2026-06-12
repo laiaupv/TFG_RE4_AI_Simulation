@@ -33,20 +33,17 @@ public class IdleState : IState
 
         Transform target = _waypoints[_currentWaypoint];
 
-        // Movimiento con CharacterController
         Vector3 targetPos = new Vector3(target.position.x,
                                         _enemy.position.y,
                                         target.position.z);
         Vector3 moveDir = (targetPos - _enemy.position).normalized;
         _characterController.Move(moveDir * _speed * Time.deltaTime);
 
-        // Mira hacia el waypoint
         Vector3 direction = target.position - _enemy.position;
         direction.y = 0;
         if (direction != Vector3.zero)
             _enemy.rotation = Quaternion.LookRotation(direction);
 
-        // Comprueba si ha llegado al waypoint
         float distance = Vector3.Distance(
             new Vector3(_enemy.position.x, 0, _enemy.position.z),
             new Vector3(target.position.x, 0, target.position.z)
@@ -54,11 +51,13 @@ public class IdleState : IState
         if (distance < _waypointThreshold)
             _currentWaypoint = (_currentWaypoint + 1) % _waypoints.Length;
 
-        // Comprueba si detecta al jugador
         float distanceToPlayer = Vector3.Distance(_enemy.position, _player.position);
         if (distanceToPlayer < _detectionRadius)
+        {
+            Debug.Log("[FSM] DETECCIÓN VISUAL - Distancia: " + distanceToPlayer.ToString("F2") + "u");
             _stateMachine.ChangeState(new AlertState(_enemy, _stateMachine,
                                                      _player, _waypoints));
+        }
     }
 
     public void OnExit()

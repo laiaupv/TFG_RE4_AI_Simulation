@@ -61,7 +61,6 @@ public class EnemyModern : MonoBehaviour
 
     void BuildBehaviorTree()
     {
-        // Nodo de ataque
         ActionNode attackNode = new ActionNode(() =>
         {
             float distance = Vector3.Distance(transform.position, _player.position);
@@ -83,7 +82,6 @@ public class EnemyModern : MonoBehaviour
             return NodeState.Failure;
         });
 
-        // Nodo de combate
         ActionNode combatNode = new ActionNode(() =>
         {
             if (!CanSeePlayer() && !CanHearPlayer())
@@ -94,6 +92,8 @@ public class EnemyModern : MonoBehaviour
             if (distance <= attackRange)
             {
                 _agent.SetDestination(transform.position);
+                if (_currentState != "Ataque")
+                    Debug.Log("[BT] TRANSICIÓN ATTACK - Distancia: " + distance.ToString("F2") + "u");
                 _currentState = "Ataque";
 
                 _attackTimer += Time.deltaTime;
@@ -107,6 +107,8 @@ public class EnemyModern : MonoBehaviour
                 return NodeState.Running;
             }
 
+            if (_currentState != "Persecución")
+                Debug.Log("[BT] TRANSICIÓN PERSECUCIÓN - Distancia: " + distance.ToString("F2") + "u");
             _agent.SetDestination(_player.position);
             _currentState = "Persecución";
 
@@ -118,24 +120,35 @@ public class EnemyModern : MonoBehaviour
             return NodeState.Running;
         });
 
-        // Nodo de alerta
         ActionNode alertNode = new ActionNode(() =>
         {
-            if (CanSeePlayer() || CanHearPlayer())
+            if (CanSeePlayer())
             {
+                float distance = Vector3.Distance(transform.position, _player.position);
+                if (_currentState != "Alerta" && _currentState != "Persecución" && _currentState != "Ataque")
+                    Debug.Log("[BT] DETECCIÓN VISUAL - Distancia: " + distance.ToString("F2") + "u | Ángulo dentro de: " + visionAngle + "°");
+                _currentState = "Alerta";
+                return NodeState.Success;
+            }
+            if (CanHearPlayer())
+            {
+                float distance = Vector3.Distance(transform.position, _player.position);
+                float hearingStrength = 1 - (distance / hearingRange);
+                if (_currentState != "Alerta" && _currentState != "Persecución" && _currentState != "Ataque")
+                    Debug.Log("[BT] DETECCIÓN AUDITIVA - Distancia: " + distance.ToString("F2") + "u | Intensidad: " + hearingStrength.ToString("F2"));
                 _currentState = "Alerta";
                 return NodeState.Success;
             }
             return NodeState.Failure;
         });
 
-        // Nodo de patrulla con NavMesh
         ActionNode patrolNode = new ActionNode(() =>
         {
             if (_previousState != "Patrulla")
             {
                 _currentWaypoint = GetNearestWaypoint();
                 _agent.SetDestination(waypoints[_currentWaypoint].position);
+                Debug.Log("[BT] VUELTA A PATRULLA - Último estado: " + _previousState);
             }
 
             _currentState = "Patrulla";
@@ -151,14 +164,12 @@ public class EnemyModern : MonoBehaviour
             return NodeState.Running;
         });
 
-        // Secuencia alerta → combate
         SequenceNode combatSequence = new SequenceNode(new List<Node>
         {
             alertNode,
             combatNode
         });
 
-        // Selector raíz
         _behaviorTree = new SelectorNode(new List<Node>
         {
             combatSequence,
@@ -173,8 +184,7 @@ public class EnemyModern : MonoBehaviour
 
         for (int i = 0; i < waypoints.Length; i++)
         {
-            float distance = Vector3.Distance(transform.position,
-                                              waypoints[i].position);
+            float distance = Vector3.Distance(transform.position, waypoints[i].position);
             if (distance < minDistance)
             {
                 minDistance = distance;

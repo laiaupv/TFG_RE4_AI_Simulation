@@ -28,14 +28,12 @@ public class ChaseState : IState
 
     public void OnUpdate()
     {
-        // Movimiento con CharacterController
         Vector3 targetPos = new Vector3(_player.position.x,
                                         _enemy.position.y,
                                         _player.position.z);
         Vector3 moveDir = (targetPos - _enemy.position).normalized;
         _characterController.Move(moveDir * _speed * Time.deltaTime);
 
-        // Mira hacia el jugador
         Vector3 direction = _player.position - _enemy.position;
         direction.y = 0;
         if (direction != Vector3.zero)
@@ -43,17 +41,17 @@ public class ChaseState : IState
 
         float distanceToPlayer = Vector3.Distance(_enemy.position, _player.position);
 
-        // Si está muy cerca pasa a atacar
         if (distanceToPlayer < _attackRadius)
         {
+            Debug.Log("[FSM] TRANSICIÓN ATTACK - Distancia: " + distanceToPlayer.ToString("F2") + "u");
             _stateMachine.ChangeState(new AttackState(_enemy, _stateMachine,
                                                       _player, _waypoints));
             return;
         }
 
-        // Si el jugador huye vuelve a alerta
         if (distanceToPlayer > _loseRadius)
         {
+            Debug.Log("[FSM] PIERDE AL JUGADOR - Distancia: " + distanceToPlayer.ToString("F2") + "u");
             _stateMachine.ChangeState(new AlertState(_enemy, _stateMachine,
                                                      _player, _waypoints));
         }
