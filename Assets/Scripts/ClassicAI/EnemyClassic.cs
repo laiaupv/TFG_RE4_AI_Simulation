@@ -92,7 +92,7 @@ public class EnemyClassic : MonoBehaviour
             string currentState = _stateMachine.GetCurrentStateName();
             if (currentState == "IdleState")
             {
-                Debug.Log("[FSM] DETECCIÓN AUDITIVA - Distancia: " + distanceToPlayer.ToString("F2") + "u");
+                //Debug.Log("[FSM] DETECCIÓN AUDITIVA - Distancia: " + distanceToPlayer.ToString("F2") + "u");
                 _stateMachine.ChangeState(new AlertState(
                     transform, _stateMachine, _player, waypoints));
             }

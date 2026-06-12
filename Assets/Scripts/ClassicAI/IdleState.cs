@@ -54,7 +54,7 @@ public class IdleState : IState
         float distanceToPlayer = Vector3.Distance(_enemy.position, _player.position);
         if (distanceToPlayer < _detectionRadius)
         {
-            Debug.Log("[FSM] DETECCIÓN VISUAL - Distancia: " + distanceToPlayer.ToString("F2") + "u");
+            //Debug.Log("[FSM] DETECCIÓN VISUAL - Distancia: " + distanceToPlayer.ToString("F2") + "u");
             _stateMachine.ChangeState(new AlertState(_enemy, _stateMachine,
                                                      _player, _waypoints));
         }

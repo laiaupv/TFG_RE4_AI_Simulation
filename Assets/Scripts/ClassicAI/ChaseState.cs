@@ -43,7 +43,7 @@ public class ChaseState : IState
 
         if (distanceToPlayer < _attackRadius)
         {
-            Debug.Log("[FSM] TRANSICIÓN ATTACK - Distancia: " + distanceToPlayer.ToString("F2") + "u");
+            //Debug.Log("[FSM] TRANSICIÓN ATTACK - Distancia: " + distanceToPlayer.ToString("F2") + "u");
             _stateMachine.ChangeState(new AttackState(_enemy, _stateMachine,
                                                       _player, _waypoints));
             return;
@@ -51,7 +51,7 @@ public class ChaseState : IState
 
         if (distanceToPlayer > _loseRadius)
         {
-            Debug.Log("[FSM] PIERDE AL JUGADOR - Distancia: " + distanceToPlayer.ToString("F2") + "u");
+            //Debug.Log("[FSM] PIERDE AL JUGADOR - Distancia: " + distanceToPlayer.ToString("F2") + "u");
             _stateMachine.ChangeState(new AlertState(_enemy, _stateMachine,
                                                      _player, _waypoints));
         }

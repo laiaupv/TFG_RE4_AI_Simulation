@@ -92,8 +92,7 @@ public class EnemyModern : MonoBehaviour
             if (distance <= attackRange)
             {
                 _agent.SetDestination(transform.position);
-                if (_currentState != "Ataque")
-                    Debug.Log("[BT] TRANSICIÓN ATTACK - Distancia: " + distance.ToString("F2") + "u");
+                // Debug.Log("[BT] TRANSICIÓN ATTACK - Distancia: " + distance.ToString("F2") + "u");
                 _currentState = "Ataque";
 
                 _attackTimer += Time.deltaTime;
@@ -107,8 +106,7 @@ public class EnemyModern : MonoBehaviour
                 return NodeState.Running;
             }
 
-            if (_currentState != "Persecución")
-                Debug.Log("[BT] TRANSICIÓN PERSECUCIÓN - Distancia: " + distance.ToString("F2") + "u");
+            // Debug.Log("[BT] TRANSICIÓN PERSECUCIÓN - Distancia: " + distance.ToString("F2") + "u");
             _agent.SetDestination(_player.position);
             _currentState = "Persecución";
 
@@ -125,8 +123,7 @@ public class EnemyModern : MonoBehaviour
             if (CanSeePlayer())
             {
                 float distance = Vector3.Distance(transform.position, _player.position);
-                if (_currentState != "Alerta" && _currentState != "Persecución" && _currentState != "Ataque")
-                    Debug.Log("[BT] DETECCIÓN VISUAL - Distancia: " + distance.ToString("F2") + "u | Ángulo dentro de: " + visionAngle + "°");
+                // Debug.Log("[BT] DETECCIÓN VISUAL - Distancia: " + distance.ToString("F2") + "u | Ángulo dentro de: " + visionAngle + "°");
                 _currentState = "Alerta";
                 return NodeState.Success;
             }
@@ -134,8 +131,7 @@ public class EnemyModern : MonoBehaviour
             {
                 float distance = Vector3.Distance(transform.position, _player.position);
                 float hearingStrength = 1 - (distance / hearingRange);
-                if (_currentState != "Alerta" && _currentState != "Persecución" && _currentState != "Ataque")
-                    Debug.Log("[BT] DETECCIÓN AUDITIVA - Distancia: " + distance.ToString("F2") + "u | Intensidad: " + hearingStrength.ToString("F2"));
+                // Debug.Log("[BT] DETECCIÓN AUDITIVA - Distancia: " + distance.ToString("F2") + "u | Intensidad: " + hearingStrength.ToString("F2"));
                 _currentState = "Alerta";
                 return NodeState.Success;
             }
@@ -148,7 +144,7 @@ public class EnemyModern : MonoBehaviour
             {
                 _currentWaypoint = GetNearestWaypoint();
                 _agent.SetDestination(waypoints[_currentWaypoint].position);
-                Debug.Log("[BT] VUELTA A PATRULLA - Último estado: " + _previousState);
+                // Debug.Log("[BT] VUELTA A PATRULLA - Último estado: " + _previousState);
             }
 
             _currentState = "Patrulla";
